@@ -52,11 +52,26 @@ browse.controller('conceptBrowserController', ['$scope','$http','$q','CONFIG', f
     }).success(function(data, status, headers) {
       if(data.length){
         var concept = data[0];
+        angular.forEach(concept.prefLabel, function(label, lang){
+          if(angular.isArray(label)){
+            concept.prefLabel[lang] = label[0];
+          }
+        });
         var deferred = $q.defer();
         if(concept.broader){
           angular.forEach(concept.broader, function(br){
             $http.get(CONFIG.baseURL + $scope.activeScheme.php + "?uri=" + br.uri).then(function(response){
-              br.prefLabel = angular.copy(response.data[0].prefLabel);
+              if(response.data[0].prefLabel){
+                br.prefLabel = angular.copy(response.data[0].prefLabel);
+                angular.forEach(br.prefLabel, function(label, lang){
+                  if(angular.isArray(label)){
+                    br.prefLabel[lang] = label[0];
+                  }
+                });
+              }
+              if(response.data[0].notation){
+                br.notation = angular.copy(response.data[0].notation);
+              }
             });
           });
         }
@@ -64,7 +79,17 @@ browse.controller('conceptBrowserController', ['$scope','$http','$q','CONFIG', f
           angular.forEach(concept.narrower, function(na){
             if(!na.prefLabel){
               $http.get(CONFIG.baseURL + $scope.activeScheme.php + "?uri=" + na.uri).then(function(response){
-                na.prefLabel = angular.copy(response.data[0].prefLabel);
+                if(response.data[0].prefLabel){
+                  na.prefLabel = angular.copy(response.data[0].prefLabel);
+                  angular.forEach(na.prefLabel, function(label, lang){
+                    if(angular.isArray(label)){
+                      na.prefLabel[lang] = label[0];
+                    }
+                  });
+                }
+                if(response.data[0].notation){
+                  na.notation = angular.copy(response.data[0].notation);
+                }
               });
             }
           });
