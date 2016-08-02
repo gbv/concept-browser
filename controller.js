@@ -14,28 +14,32 @@ browse.run(['$rootScope','$http','CONFIG',function($rootScope,$http,CONFIG) {
 
 browse.controller('conceptBrowserController', ['$scope','$http','$q','CONFIG', function ($scope, $http, $q, CONFIG){
 
-    $scope.loading = true;
-    $scope.schemes = []; 
-    $http.get('schemes.json').then(function(response){
-        $scope.schemes = response.data;      
-        
-        $scope.baseURL = CONFIG.baseURL; //?
-        $scope.selectScheme($scope.schemes[0]);
-    }, function(response) {
-        // TODO: show error
-        $scope.loading = false;
-    }).finally(function() {
-        $scope.loading = false;
+  // load list of known concept schemes
+  $scope.loading = true;
+  $scope.schemes = [];
+  $http.get('schemes.json').then(function(response){
+    response.data.forEach(function(scheme) {
+			scheme.concepts = CONFIG.baseURL + scheme.concepts;
     });
+    $scope.schemes = response.data;      
+    $scope.selectScheme($scope.schemes[0]);
+  }, function(response) {
+    // TODO: show error
+  }).finally(function() {
+		$scope.loading = false;
+  });
 
+  // further initalization of controller
   $scope.activeConcept = null;
   $scope.status = {
     isopen: false
   };
   $scope.language = "en";
-  $scope.selectURI = function(uri){
+ 
+ 	$scope.selectURI = function(uri){
     $scope.activeURI = angular.copy(uri);
   }
+
   $scope.selectScheme = function(scheme){
     $scope.activeScheme = scheme;
     $scope.activeConcept = null;
@@ -44,10 +48,10 @@ browse.controller('conceptBrowserController', ['$scope','$http','$q','CONFIG', f
       $scope.activeURI = angular.copy(scheme.example);
     }
   }
-  
+
   $scope.getConcept = function(uri){
     $scope.loading = true;
-    $http.get(CONFIG.baseURL + $scope.activeScheme.php, { 
+    $http.get( $scope.activeScheme.concepts, { 
         params: { uri: uri },
     }).success(function(data, status, headers) {
       if(data.length){
@@ -60,7 +64,7 @@ browse.controller('conceptBrowserController', ['$scope','$http','$q','CONFIG', f
         var deferred = $q.defer();
         if(concept.broader){
           angular.forEach(concept.broader, function(br){
-            $http.get(CONFIG.baseURL + $scope.activeScheme.php + "?uri=" + br.uri).then(function(response){
+            $http.get( $scope.activeScheme.concepts + "?uri=" + br.uri).then(function(response){
               if(response.data[0].prefLabel){
                 br.prefLabel = angular.copy(response.data[0].prefLabel);
                 angular.forEach(br.prefLabel, function(label, lang){
@@ -78,7 +82,7 @@ browse.controller('conceptBrowserController', ['$scope','$http','$q','CONFIG', f
         if(concept.narrower){
           angular.forEach(concept.narrower, function(na){
             if(!na.prefLabel){
-              $http.get(CONFIG.baseURL + $scope.activeScheme.php + "?uri=" + na.uri).then(function(response){
+              $http.get( $scope.activeScheme.concepts + "?uri=" + na.uri).then(function(response){
                 if(response.data[0].prefLabel){
                   na.prefLabel = angular.copy(response.data[0].prefLabel);
                   angular.forEach(na.prefLabel, function(label, lang){
@@ -105,20 +109,12 @@ browse.controller('conceptBrowserController', ['$scope','$http','$q','CONFIG', f
       $scope.loading = false;
     });
   }
+
   $scope.browseConcept = function(concept){
     $scope.activeConcept = null;
     $scope.getConcept(concept.uri);
   }
   
-  $scope.toggled = function(open) {
-    $log.log('Dropdown is now: ', open);
-  };
-
-  $scope.toggleDropdown = function($event) {
-    $event.preventDefault();
-    $event.stopPropagation();
-    $scope.status.isopen = !$scope.status.isopen;
-  };
 }]);
 
 browse.config(['$httpProvider', function($httpProvider) {
