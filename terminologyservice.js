@@ -12,35 +12,41 @@ var tree = [
             tags: ["612"],
             nodes: [
               {
-                text: "Blut und Kreislauf",
-                tags: ["612.1"],
+                text: "Einzelne Funktionen, Systeme, Organe",
+                tags: ["612.1-.8"],
                 nodes: [
-                  {
-                    text: "Blut",
-                    tags: ["612.11"],
+                   {
+                    text: "Blut und Kreislauf",
+                    tags: ["612.1"],
                     nodes: [
-                      { 
-                        text: "Leukozyten (Weiße Blutkörperchen)",
-                        state: { selected: true },
-                        tags: ["612.112"],
+                      {
+                        text: "Blut",
+                        tags: ["612.11"],
                         nodes: [
-                          {
-                            text: "Biophysik",
-                            tags: ["612.1122"]
-                          },
-                          {
-                            text: "Anzahl und Auszählung",
-                            tags: ["612.1127"]
-                          },
+                          { 
+                            text: "Leukozyten (Weiße Blutkörperchen)",
+                            state: { selected: true },
+                            tags: ["612.112"],
+                            nodes: [
+                              {
+                                text: "Biophysik",
+                                tags: ["612.1122"]
+                              },
+                              {
+                                text: "Anzahl und Auszählung",
+                                tags: ["612.1127"]
+                              },
+                            ]
+                          }
                         ]
-                      }
+                      },
                     ]
                   },
-                ]
+                ], 
               },
-            ], 
+            ],
           },
-        ],
+        ], 
       },
     ], 
   },
