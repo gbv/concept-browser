@@ -15,6 +15,7 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0/angular.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/1.3.3/ui-bootstrap-tpls.min.js"></script>
+
     <script src="controller.js"></script>
     <script src="lib/ng-skos/ng-skos.min.js"></script>
     <link rel="stylesheet" href="lib/ng-skos/ng-skos.css">
@@ -23,24 +24,59 @@
   </head>
   <body>
     <div class="container" ng-app="Browser">
-      <h2>JSKOS Concept Browser</h2>
-      <p>
+      <div class="page-header">
+        <h1>Normdatendienst</h1>
+      </div>
+
+      <!--p>
         This page allows the browsing through concepts of several Knowledge Organization Systems.
-        <a href="https://github.com/gbv/jskos-php-examples">jskos PHP library</a>. 
-      </p>
+      </p-->
 
       <div ng-controller="conceptBrowserController">
-        <div class="row">
-          <div class="col-sm-4">
-            <div class="btn-group" uib-dropdown is-open="status.isopen" style="padding-top:10px;">
-              <button id="split-button" type="button" class="btn">
-                <span ng-if="activeScheme.prefLabel" skos-label="activeScheme.prefLabel" />
+      <form class="form-horizontal">
+        <div class="form-group">
+          <label for="terminology" class="col-sm-2 control-label hidden-xs">Normdatei</label>
+          <div class="col-sm-10">
+            <div class="input-group" uib-dropdown keyboard-nav  style="width:100%;">
+              <button id="split-button" type="button" uib-dropdown-toggle
+                      class="btn" style="width:100%; text-align: left">
+                <span ng-if="activeScheme.prefLabel" skos-label="activeScheme.prefLabel"/>
                 <span ng-if="!activeScheme.prefLabel">Select a KOS</span>
               </button>
-              <button type="button" class="btn btn-primary" uib-dropdown-toggle>
+              <!--a type="button" class="btn btn-primary input-btn-group" uib-dropdown-toggle 
+                 style="display: table-cell;">
                 <span class="caret"></span>
                 <span class="sr-only">Split button!</span>
-              </button>
+              </a-->
+              <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="single-button">
+                <li ng-repeat="s in schemes">
+                  <a href="#" ng-click="selectScheme(s)" skos-label="s.prefLabel"></a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="search" class="col-sm-2 control-label hidden-xs">Identifier</label>
+          <div class="col-sm-10">
+            <div class="input-group">
+              <input type="text" name="input" class="form-control" placeholder="Identifier"
+                     ng-model="activeURI" ng-change="selectURI(activeURI)"></input>
+              <a type="submit" ng-click="getConcept(activeURI)" class="btn btn-primary input-group-btn"
+                  style="font-size:100%">
+                <span class="glyphicon glyphicon-search"></span>
+                Suche
+              </a>
+            </div>
+          </div>
+        </div>
+      </form>
+
+      <hr/>
+
+
+        <!--div class="row">
+          <div class="col-sm-4">
               <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="single-button">
                 <li ng-repeat="s in schemes">
                     <a href="#" ng-click="selectScheme(s)"><span skos-label="s.prefLabel"></span></a>
@@ -61,18 +97,18 @@
               </div>
             </form>
           </div>
-        </div>
-        <div class="row" style="margin-top:20px;min-height:400px;">
-          <div class="col-sm-5">
-            <h2 ng-if="activeConcept || loading">Result</h2>
+        </div-->
+
+
+        <div class="row" style="">
+          <div class="col-sm-12">
             <div ng-if="activeConcept" skos-concept="activeConcept" language="language" skos-click="browseConcept"></div>
             <div ng-show="loading" style="padding-left:115px;padding-top:80px;font-size:1.7em;">
                 <i class="fa fa-refresh fa-spin"></i>
             </div>
           </div>
-          <div class="col-sm-7">
-          </div>
         </div>
+
       </div>
     </div>
 

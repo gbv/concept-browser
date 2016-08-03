@@ -19,14 +19,14 @@ browse.controller('conceptBrowserController', ['$scope','$http','$q','CONFIG', f
   $scope.schemes = [];
   $http.get('schemes.json').then(function(response){
     response.data.forEach(function(scheme) {
-			scheme.concepts = CONFIG.baseURL + scheme.concepts;
+	  scheme.concepts = CONFIG.baseURL + scheme.concepts;
     });
     $scope.schemes = response.data;      
     $scope.selectScheme($scope.schemes[0]);
   }, function(response) {
     // TODO: show error
   }).finally(function() {
-		$scope.loading = false;
+	$scope.loading = false;
   });
 
   // further initalization of controller
