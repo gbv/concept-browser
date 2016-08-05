@@ -1,13 +1,24 @@
 # Normdatendienst-UI
 
-Dieses Repository enthält das Webinterface des Normdatendienst.
+Dieses Repository enthält das Webinterface des Normdatendienst. Die Anwendung
+stellt eine einheitliche Oberfläche zum Browsing in verschiedenen Normdateien
+(Knowledge Organization Systems, KOS) bereit. 
 
-Der Normdatendienst ermöglicht Abfrage und Browsing in von verschiedenen
-Normdateien (Knowledge Organization Systems, KOS) auf Basis des
-[JSKOS Datenformat](https://gbv.github.io/jskos/) und der 
+Die Umsetzung basiert auf JavaScript mit dem AngularJS-Framework. Wesentliche
+Teile der Implementierung sind als eigenständiges AngularJS-Module
+[ng-skos](http://gbv.github.io/ng-skos/) verfügbar.
+
+## Hintergrund
+
+Grundlagen für den Zugriff auf die Normdateien sind das 
+[JSKOS Datenformat](https://gbv.github.io/jskos/) und die
 [ELMA API](http://gbv.github.io/elma/).
 
-Die Umsetzung in JavaScript basiert auf AngularJS.
+## Testinstallation
+
+Unter <https://normdatendienst.herokuapp.com/> läuft eine Testinstallation, die
+beim Update des Code-Repository auf GitHub automatisch aktualisiert wird. Der
+Dienst kann zeitweise nicht erreichbar sein.
 
 ## Installation und Konfiguration
 
@@ -25,4 +36,9 @@ eine Basis-URL für Normdatendienste festgelegt werden.  Standardmäßig und
 Verwendung als Webinterface als statische HTML-Seite wird der Wert
 <http://localhost:8080/> verwendet. Die Test-Installation auf Heroku
 verwendet dagegen <https://jskos-php-examples.herokuapp.com/>.
+
+## Feedback
+
+Bug-Reports und Feature-Request können direkt bei GitHub unter
+<https://github.com/gbv/normdatendienst-ui/issues> eintragen werden.
 

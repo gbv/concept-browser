@@ -1,28 +1,46 @@
 /**
  * Web interface des Normdatendienst.
  */
-var browse = angular.module('Browser', ['ngSKOS', 'ui.bootstrap']);
+var normdatendienst = angular.module('Normdatendienst', 
+    ['ngSKOS', 'ui.bootstrap', 'angular-loading-bar']);
 
-browse.controller('conceptBrowserController', ['$scope','$http','$q', function ($scope, $http, $q) {
+// configure
+normdatendienst.config(['$httpProvider','cfpLoadingBarProvider', function($httpProvider, cfpLoadingBarProvider) {
+
+  // TODO: explain this
+  $httpProvider.defaults.useXDomain = true;
+  delete $httpProvider.defaults.headers.common['X-Requested-With'];
+
+  // loading bar, shown during each HTTP request
+  cfpLoadingBarProvider.includeSpinner = false;
+  cfpLoadingBarProvider.parentSelector = '#loading-bar-container';
+
+}]);
+
+normdatendienst.controller('conceptBrowserController', ['$scope','$http','$q', '$sce', function ($scope, $http, $q, $sce) {
 
   // configure base URL
   if (!$scope.baseURL) {
     $scope.baseURL = 'http://localhost:8080/';
   }
 
+  var statusMessage = function(html) {
+     $scope.$parent.status = $sce.trustAsHtml(html);
+  }
+
   // load list of known concept schemes
-  $scope.loading = true;
+  statusMessage("initializing...");
   $scope.schemes = [];
-  $http.get('schemes.json').then(function(response){
+  var schemesURL = 'schemes.json';
+  $http.get(schemesURL).then(function(response){
     response.data.forEach(function(scheme) {
 	  scheme.concepts = $scope.baseURL + scheme.concepts;
     });
     $scope.schemes = response.data;      
     $scope.selectScheme($scope.schemes[0]);
+    statusMessage("got list of concept schemes from <a href='"+schemesURL+"'>"+schemesURL+"</a>");
   }, function(response) {
-    // TODO: show error
-  }).finally(function() {
-	$scope.loading = false;
+    statusMessage("failed to load list of concept schemes");
   });
 
   // further initalization of controller
@@ -46,17 +64,11 @@ browse.controller('conceptBrowserController', ['$scope','$http','$q', function (
   }
 
   $scope.getConcept = function(uri){
-    $scope.loading = true;
     $http.get( $scope.activeScheme.concepts, { 
         params: { uri: uri },
     }).success(function(data, status, headers) {
-      if(data.length){
-        var concept = data[0];
-        angular.forEach(concept.prefLabel, function(label, lang){
-          if(angular.isArray(label)){
-            concept.prefLabel[lang] = label[0];
-          }
-        });
+      var concept = data[0];
+      if(concept) {
         var deferred = $q.defer();
         if(concept.broader){
           angular.forEach(concept.broader, function(br){
@@ -95,25 +107,17 @@ browse.controller('conceptBrowserController', ['$scope','$http','$q', function (
           });
         }
         deferred.resolve(concept);
-        $scope.activeConcept = concept;
       }
+      $scope.activeConcept = concept;
+      statusMessage("Konzept geladen");
     }).error(function(data, status, headers){
-        $scope.httpError = data ? data : {
-            message: "HTTP request failed."
-        };
-    }).finally(function(){
-      $scope.loading = false;
+      statusMessage("HTTP-Anfrage fehlgeschlagen!");
     });
   }
 
   $scope.browseConcept = function(concept){
-    $scope.activeConcept = null;
     $scope.getConcept(concept.uri);
   }
   
 }]);
 
-browse.config(['$httpProvider', function($httpProvider) {
-  $httpProvider.defaults.useXDomain = true;
-  delete $httpProvider.defaults.headers.common['X-Requested-With'];
-}]);

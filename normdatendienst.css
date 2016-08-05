@@ -18,3 +18,8 @@ p{
 .skos-concept-connected{
   max-height:none;
 }
+
+/* loading bar */
+#loading-bar .bar, #loading-bar .peg, #loading-bar-spinner {
+  position: relative;
+}
