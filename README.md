@@ -22,11 +22,10 @@ Dienst kann zeitweise nicht erreichbar sein.
 
 ## Installation und Konfiguration
 
-Zur Installation von Abhängigkeiten muss zunächst eines der beiden Kommandos
-aufgerufen werden:
+Zur Installation von Abhängigkeiten muss zunächst folgendes Kommando aufgerufen
+werden. Die benötigten Dateien befinden sich anschließend unter `node_modules`:
 
     npm install
-    composer install    # ruft seinerseits `npm install` auf
 
 Die Anwendung kann sowohl als statische Webseite (`index.html`) als auch
 dynamisch als PHP-Script (`index.php`) verwendet werden. Bei der Installation

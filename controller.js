@@ -63,6 +63,26 @@ normdatendienst.controller('conceptBrowserController', ['$scope','$http','$q', '
     }
   }
 
+  // load concepts without labels or notations
+  var loadLabels = function(concepts) {
+    if (!concepts || !concepts.length) return;
+    angular.forEach(concepts, function(c) {
+      if (!c.uri) return;
+
+      if (c.prefLabel) return; // TODO: check language tags first!
+      if (c.notation && c.notation.length && c.notation[0] !== null) return;
+
+      $http.get( $scope.activeScheme.concepts + "?uri=" + c.uri + "&properties=prefLabel,notation")
+      .then(function(response) {
+        var got = response.data[0];
+        if (!got) return; // not found
+        // TODO: better merge instead of overwriting
+        c.prefLabel = got.prefLabel;
+        c.notation  = got.notation;
+      });
+    });
+  };
+
   $scope.getConcept = function(uri){
     $http.get( $scope.activeScheme.concepts, { 
         params: { uri: uri },
@@ -70,42 +90,16 @@ normdatendienst.controller('conceptBrowserController', ['$scope','$http','$q', '
       var concept = data[0];
       if (concept) {
         var deferred = $q.defer();
-        if (concept.broader){
-          angular.forEach(concept.broader, function(br){
-            $http.get( $scope.activeScheme.concepts + "?uri=" + br.uri).then(function(response){
-              if(response.data[0].prefLabel){
-                br.prefLabel = angular.copy(response.data[0].prefLabel);
-                angular.forEach(br.prefLabel, function(label, lang){
-                  if(angular.isArray(label)){
-                    br.prefLabel[lang] = label[0];
-                  }
-                });
-              }
-              if(response.data[0].notation){
-                br.notation = angular.copy(response.data[0].notation);
-              }
-            });
-          });
-        }
-        if (concept.narrower){
-          angular.forEach(concept.narrower, function(na){
-            if(!na.prefLabel){
-              $http.get( $scope.activeScheme.concepts + "?uri=" + na.uri).then(function(response){
-                if(response.data[0].prefLabel){
-                  na.prefLabel = angular.copy(response.data[0].prefLabel);
-                  angular.forEach(na.prefLabel, function(label, lang){
-                    if(angular.isArray(label)){
-                      na.prefLabel[lang] = label[0];
-                    }
-                  });
-                }
-                if(response.data[0].notation){
-                  na.notation = angular.copy(response.data[0].notation);
-                }
-              });
-            }
-          });
-        }
+
+        ['broader','narrower','related','previous','next','relatedPlace'].forEach(function(field) {
+          loadLabels(concept[field]);
+        });
+
+        // TODO: get depiction
+        // TODO: what about altLabel and other literals?
+        // TODO: what about ancestors?
+        // TODO: what about subjectOf?
+
         deferred.resolve(concept);
       }
       $scope.activeConcept = concept;

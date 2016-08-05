@@ -9,10 +9,5 @@
             "email": "voss@gbv.de"
         }
     ],
-    "require": {},
-    "scripts": {
-        "post-install-cmd": [
-            "npm install"
-        ]
-    }
+    "require": {}
 }

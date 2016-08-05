@@ -56,7 +56,13 @@
     <div ng-if="startDate || endDate">
       Zeit: {{startDate}}-{{endDate}}
     </div>
-    <ul ng-if="relatedPlace.length" ng-repeat="p in relatedPlace">
-      <li><span skos-concept="p" skos-click="click" template-url="sub-concept.html"></span></li>
-    </ul>
+    <div ng-if="related.length || relatedPlace.length">
+      Siehe auch:  
+      <ul ng-repeat="c in related">
+        <li><span skos-concept="c" skos-click="click" template-url="sub-concept.html"></span></li>
+      </ul>
+      <ul ng-repeat="c in relatedPlace">
+        <li><span skos-concept="c" skos-click="click" template-url="sub-concept.html"></span></li>
+      </ul>
+    </div>
 </div>
