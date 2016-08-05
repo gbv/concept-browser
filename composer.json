@@ -1,0 +1,13 @@
+{
+    "name": "gbv/normdatendienst-ui",
+    "description": "Webinterface des Normdatendienst",
+    "type": "project",
+    "license": "AGPL",
+    "authors": [
+        {
+            "name": "Jakob Voss",
+            "email": "voss@gbv.de"
+        }
+    ],
+    "require": {}
+}

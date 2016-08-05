@@ -1,25 +1,21 @@
 /**
- * Web Interface to browse through concepts of several Knowledge Organization Systems.
+ * Web interface des Normdatendienst.
  */
 var browse = angular.module('Browser', ['ngSKOS', 'ui.bootstrap']);
 
-// configuration
-browse.constant('CONFIG', {
-    baseURL: 'http://localhost:8080/'
-});
+browse.controller('conceptBrowserController', ['$scope','$http','$q', function ($scope, $http, $q) {
 
-// initalization
-browse.run(['$rootScope','$http','CONFIG',function($rootScope,$http,CONFIG) {
-}]);
-
-browse.controller('conceptBrowserController', ['$scope','$http','$q','CONFIG', function ($scope, $http, $q, CONFIG){
+  // configure base URL
+  if (!$scope.baseURL) {
+    $scope.baseURL = 'http://localhost:8080/';
+  }
 
   // load list of known concept schemes
   $scope.loading = true;
   $scope.schemes = [];
   $http.get('schemes.json').then(function(response){
     response.data.forEach(function(scheme) {
-	  scheme.concepts = CONFIG.baseURL + scheme.concepts;
+	  scheme.concepts = $scope.baseURL + scheme.concepts;
     });
     $scope.schemes = response.data;      
     $scope.selectScheme($scope.schemes[0]);
