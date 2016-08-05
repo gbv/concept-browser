@@ -14,8 +14,9 @@ Die Umsetzung in JavaScript basiert auf AngularJS.
 Die Anwendung kann sowohl als statische Webseite (`index.html`) als auch
 dynamisch als PHP-Script (`index.php`) verwendet werden. Bei der Installation
 mit PHP ist darauf zu achten, dass `index.php` statt `index.html` geladen wird.
-Für die Installation unter Apache-Webserver enthält die Anwendung dazu
-folgender Eintrag in der Datei `.htaccess`:
+
+Für die Installation unter Apache-Webserver kann beispielsweise folgender
+folgender Eintrag in der Datei `.htaccess` notwendig sein:
 
     DirectoryIndex index.php index.html 
 

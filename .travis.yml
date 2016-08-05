@@ -1,0 +1,17 @@
+language: php
+php:
+- 5.6
+- 7.0
+matrix:
+  fast_finish: true
+install:
+- composer install
+script:
+- echo "no tests implemented yet!"
+deploy:
+  provider: heroku
+  api_key:
+    secure: e1vcLTztmmbLDS1JDK9KX4CF8QT22hi09xmsmkYZh4cODNiQEZ5Ficg8eeQwq7cbxBC9V3NywyD7tMylE/eteVnZEUE8v3shg6qXFQlS5mG58UFUqH/Z907lrzPYoEVAOe/r54wqN43La7lykUs5GCQ9oZq0c70c5qnncKAoFtm098vzzTjtZgg2J6kLVlNcH+DlBQBP8z0vsSrxDOfFoT9ImeZXs0u0mlrHUgo91nUC8ruJoYvFRTFCrAs9xTLNXuXAKDmsmRIP0shfC7vbNPWGw0HuiesXDdvczdkF3zewH5BsNDsSo7snoIj3kqDNqNmWDlKVZNeBW0GjRc/KbwHT0aAsi44NYkEaWMYfxkcIvDXP2NJX7+AO8ot3uQ90/dKudIULXwAHIu0J6F/CT4oT4ip+0xjlXCeSrT7jam7PNYK9RJugxPCrhUgv5gVIRdGJGetz/S3pKWl/LPVGuA1Gl8MxQ5c1afI9hTLbtWCQpf2A+bUjBli4gDsFOeUCQBG+Lh+BElBHDgJyITkE+4HwAXZeWmxO/iMcghUqATsQZGn4yEBSZOq8atjcTLHPNNrVubvvZw0xA90BKjpRcITM8lITT06rhPKWlzBG1Num9941arFIoZvnpId3AYf1Z1s0sLkx3NK3AzfUExH4ObbK24Q5h6szh9NyH9NilnI=
+  app: normdatendienst
+  on: master
+  skip_cleanup: true
