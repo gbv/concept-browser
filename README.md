@@ -22,6 +22,12 @@ Dienst kann zeitweise nicht erreichbar sein.
 
 ## Installation und Konfiguration
 
+Zur Installation von Abhängigkeiten muss zunächst eines der beiden Kommandos
+aufgerufen werden:
+
+    npm install
+    composer install    # ruft seinerseits `npm install` auf
+
 Die Anwendung kann sowohl als statische Webseite (`index.html`) als auch
 dynamisch als PHP-Script (`index.php`) verwendet werden. Bei der Installation
 mit PHP ist darauf zu achten, dass `index.php` statt `index.html` geladen wird.

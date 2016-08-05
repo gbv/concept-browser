@@ -68,9 +68,9 @@ normdatendienst.controller('conceptBrowserController', ['$scope','$http','$q', '
         params: { uri: uri },
     }).success(function(data, status, headers) {
       var concept = data[0];
-      if(concept) {
+      if (concept) {
         var deferred = $q.defer();
-        if(concept.broader){
+        if (concept.broader){
           angular.forEach(concept.broader, function(br){
             $http.get( $scope.activeScheme.concepts + "?uri=" + br.uri).then(function(response){
               if(response.data[0].prefLabel){
@@ -87,7 +87,7 @@ normdatendienst.controller('conceptBrowserController', ['$scope','$http','$q', '
             });
           });
         }
-        if(concept.narrower){
+        if (concept.narrower){
           angular.forEach(concept.narrower, function(na){
             if(!na.prefLabel){
               $http.get( $scope.activeScheme.concepts + "?uri=" + na.uri).then(function(response){

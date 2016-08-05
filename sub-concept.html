@@ -1,0 +1,7 @@
+<div>
+    <a ng-click="click(this)">
+        <span ng-if="notation.length" class="notation">{{notation[0]}}</span>
+        <span ng-if="prefLabel" skos-label="concept.prefLabel" lang="{{language}}"></span>
+        <span ng-if="!prefLabel && !notation.length">…</span>
+    </a>
+</div>

@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "angular-loading-bar": "^0.9.0",
+    "ng-skos": "0.0.11"
+  }
+}

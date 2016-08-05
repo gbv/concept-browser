@@ -7,3 +7,6 @@ Thumbs.db
 vendor/
 .env
 composer.phar
+
+# npm
+node_modules/
