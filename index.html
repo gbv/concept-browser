@@ -7,7 +7,6 @@
     <title>Normdatendienst</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     <link rel="stylesheet" href="css/font-awesome.min.css">
-    <link rel="stylesheet" href="css/bootstrap-vzg.css">
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -78,23 +77,24 @@
         </div>
       </form>
 
+      <a ng-if="apiURL" href="{{apiURL}}" style="float:right; padding-left: 5px">
+        <span class="glyphicon glyphicon-cloud-download"></span>
+      </a>
       <hr id="loading-bar-container"/>
 
-        <div class="row">
-          <div class="col-sm-12">
-            <div ng-if="activeConcept" 
-                 template-url="concept.html"
-                 skos-concept="activeConcept" language="language" skos-click="browseConcept"></div>
-            <p ng-if="!activeConcept">
-               Kein Normdatensatz vorhanden.
-            </p>
-          </div>
+        <div ng-if="activeConcept" 
+             template-url="concept.html"
+             skos-concept="activeConcept" language="language" skos-click="browseConcept"></div>
         </div>
+
+        <!--div ng-if="!activeConcept" class="row">
+          <p>Kein Normdatensatz vorhanden</p>
+        </div-->
 
       </div>
     </div>
 
-    <footer class="footer">
+    <footer>
       <div class="container">
         <div class="row">
         </div>

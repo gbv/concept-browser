@@ -17,7 +17,9 @@ normdatendienst.config(['$httpProvider','cfpLoadingBarProvider', function($httpP
 
 }]);
 
-normdatendienst.controller('conceptBrowserController', ['$scope','$http','$q', '$sce', function ($scope, $http, $q, $sce) {
+normdatendienst.controller('conceptBrowserController', 
+  ['$scope','$http','$httpParamSerializer','$q', '$sce', 
+  function ($scope, $http, $httpParamSerializer, $q, $sce) {
 
   // configure base URL
   if (!$scope.baseURL) {
@@ -48,9 +50,9 @@ normdatendienst.controller('conceptBrowserController', ['$scope','$http','$q', '
   $scope.status = {
     isopen: false
   };
-  $scope.language = "en";
+  $scope.language = "de";
  
- 	$scope.selectURI = function(uri){
+  $scope.selectURI = function(uri){
     $scope.activeURI = angular.copy(uri);
   }
 
@@ -72,7 +74,8 @@ normdatendienst.controller('conceptBrowserController', ['$scope','$http','$q', '
       if (c.prefLabel) return; // TODO: check language tags first!
       if (c.notation && c.notation.length && c.notation[0] !== null) return;
 
-      $http.get( $scope.activeScheme.concepts + "?uri=" + c.uri + "&properties=prefLabel,notation")
+      var url = $scope.activeScheme.concepts + "?uri=" + c.uri + "&properties=prefLabel,notation";
+      $http.get( url )
       .then(function(response) {
         var got = response.data[0];
         if (!got) return; // not found
@@ -83,10 +86,10 @@ normdatendienst.controller('conceptBrowserController', ['$scope','$http','$q', '
     });
   };
 
-  $scope.getConcept = function(uri){
-    $http.get( $scope.activeScheme.concepts, { 
-        params: { uri: uri },
-    }).success(function(data, status, headers) {
+  $scope.getConcept = function(uri) {
+    var url = $scope.activeScheme.concepts + '?' + $httpParamSerializer({ uri:uri });
+    $scope.apiURL = url;
+    $http.get(url).success(function(data, status, headers) {
       var concept = data[0];
       if (concept) {
         var deferred = $q.defer();

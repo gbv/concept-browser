@@ -1,12 +1,15 @@
-<div class="skos-concept">
+<div class="row">
+  <div class="col-md-6">
+
     <div class="top top-alt">
         <span ng-if="notation.length" class="notation">{{notation[0]}}</span>
         <b>
             <span ng-if="prefLabel" skos-label="concept.prefLabel" lang="{{language}}"></span>
         </b>
+
         <span ng-if="!prefLabel && !altLabel && !notation.length">???</span>
         <a ng-if="uri && uri != notation" class="uri" href="{{uri}}" target="_blank">
-            <span class="glyphicon glyphicon-globe"></span>
+            <span class="glyphicon glyphicon-tower"></span>
         </a>
     </div>
     <div ng-if="altLabel" class="skos-concept-altlabel">
@@ -17,52 +20,81 @@
             </li>
         </ul>
     </div>
-    <div ng-if="broader.length || narrower.length || related.length" class="skos-concept-connected">
-        <div ng-if="broader.length" class="skos-concept-relation skos-concept-relation-broader">
-            <ul ng-repeat="c in broader">
-                <li>
-                    <div>&#8613;</div>
-                    <div class="skos-concept-relation-label">
-                        <span skos-concept="c" skos-click="click" template-url="sub-concept.html"></span></li>
-                    </div>
-                </li>
-            </ul>
-        </div>
-        <div ng-if="narrower.length" class="skos-concept-relation skos-concept-relation-narrower">
-            <ul ng-repeat="c in narrower">
-                <li>
-                    <div>&#8615;</div>
-                    <div class="skos-concept-relation-label">
-                        <span skos-concept="c" skos-click="click" template-url="sub-concept.html"></span></li>
-                    </div>
-                </li>
-            </ul>
-        </div>
-        <div ng-if="related.length" class="skos-concept-relation skos-concept-relation-related">
-            <ul ng-repeat="c in related">
-                <li>
-                    <div>&#8614;</div>
-                    <div class="skos-concept-relation-label">
-                        <span skos-concept="c" skos-click="click" template-url="sub-concept.html"></span></li>
-                    </div>
-                </li>
-            </ul>
-        </div>
-    </div>
-    <!-- TODO: select by language, only show a limited number -->
-    <div style="margin-bottom:10px">
-        <div skos-notes="concept" lang="{{language}}"></div>
-    </div>
+
+  </div>
+  <div class="col-md-6">
+
     <div ng-if="startDate || endDate">
-      Zeit: {{startDate}}-{{endDate}}
+      <span class="glyphicon glyphicon-time"></span>
+      {{startDate}}-{{endDate}}
     </div>
-    <div ng-if="related.length || relatedPlace.length">
-      Siehe auch:  
-      <ul ng-repeat="c in related">
-        <li><span skos-concept="c" skos-click="click" template-url="sub-concept.html"></span></li>
-      </ul>
-      <ul ng-repeat="c in relatedPlace">
-        <li><span skos-concept="c" skos-click="click" template-url="sub-concept.html"></span></li>
-      </ul>
-    </div>
+
+    <!-- TODO: select by language, only show a limited number -->
+    <div skos-notes="concept" lang="{{language}}"></div>
+   
+  </div>
 </div>
+
+
+<div class="row" ng-if="broader.length">
+  <div class="col-md-12">
+    <ul class="list-group">
+      <li ng-repeat="c in broader" class="list-group-item">
+        <span class="glyphicon glyphicon-arrow-up" style="float:left; padding-right: 5px"></span>
+        <span skos-concept="c" skos-click="click" template-url="sub-concept.html"/>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="row" ng-if="narrower.length">
+  <div class="col-md-12">
+    <ul class="list-group">
+      <li ng-repeat="c in narrower" class="list-group-item">
+        <span class="glyphicon glyphicon-arrow-down" style="float:left; padding-right: 5px"></span>
+        <span skos-concept="c" skos-click="click" template-url="sub-concept.html"/>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="row" ng-if="previous.length || next.length">
+  <div class="col-md-6">
+    <div ng-if="previous.length">
+      <ul class="list-group">
+        <!-- TODO: use bootstrap linked list instead -->
+        <li ng-repeat="c in previous" class="list-group-item">
+          <span class="glyphicon glyphicon-arrow-left" style="float:left; padding-right: 5px"></span>
+          <span skos-concept="c" skos-click="click" template-url="sub-concept.html"/>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="col-md-6" ng-if="next.length">
+    <ul class="list-group">
+      <li ng-repeat="c in next" class="list-group-item">
+        <span class="glyphicon glyphicon-arrow-right" style="float:right"></span>
+        <span skos-concept="c" skos-click="click" template-url="sub-concept.html"/>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="row" ng-if="related.length || relatedPlace.length">
+  <div class="col-md-12">
+    <ul class="list-group" ng-if="related.length">
+      <li ng-repeat="c in related" class="list-group-item">
+        <span class="glyphicon glyphicon-hand-right" style="float:left; padding-right: 5px"></span>
+        <span skos-concept="c" skos-click="click" template-url="sub-concept.html"/>
+      </li>
+    </ul>
+    <ul class="list-group" ng-if="relatedPlace.length">
+      <li ng-repeat="c in relatedPlace" class="list-group-item">
+        <span class="glyphicon glyphicon-globe" style="float:left; padding-right: 5px"></span>
+        <span skos-concept="c" skos-click="click" template-url="sub-concept.html" />
+      </li>
+    </ul>
+  </div>
+</div>
+
+
