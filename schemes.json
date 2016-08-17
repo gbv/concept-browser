@@ -3,7 +3,7 @@
     "prefLabel": {
       "de": "Gemeinsame Normdatei"
     },
-    "bartoc": "http://bartoc.org/en/node/430",
+    "uri": "http://bartoc.org/en/node/430",
     "url": "http://www.dnb.de/DE/Standardisierung/GND/gnd_node.html",
     "example": "http://d-nb.info/gnd/2067967-1",
     "concepts": "GND.php"
@@ -12,7 +12,7 @@
     "prefLabel": {
       "en": "Wikidata"
     },
-    "bartoc": "http://bartoc.org/en/node/1940",
+    "uri": "http://bartoc.org/en/node/1940",
     "url": "https://www.wikidata.org/",
     "example": "http://www.wikidata.org/entity/Q36578",
     "concepts": "Wikidata.php"
@@ -21,7 +21,7 @@
     "prefLabel": {
       "en": "Iconclass"
     },
-    "bartoc": "http://bartoc.org/en/node/459",
+    "uri": "http://bartoc.org/en/node/459",
     "url": "http://www.iconclass.nl/home",
     "example": "http://iconclass.org/25F23(LION)(%2B46)",
     "concepts": "Iconclass.php"
@@ -30,7 +30,7 @@
     "prefLabel": {
       "en": "Melvil Decimal Classification"
     },
-    "bartoc": "http://bartoc.org/en/node/2040",
+    "uri": "http://bartoc.org/en/node/2040",
     "url": "https://www.librarything.com/mds/",
     "example": "http://www.librarything.com/mds/569.8",
     "concepts": "MDS.php"
@@ -39,17 +39,10 @@
     "prefLabel": {
       "en": "VIAF"
     },
+    "uri": "http://bartoc.org/en/node/2053",
     "url": "http://www.viaf.org/",
     "example": "http://viaf.org/viaf/87772061",
     "concepts": "VIAF.php"
-  },
-  {
-    "prefLabel": {
-      "en": "Europeana OpenSKOS API"
-    },
-    "example": "http://id.loc.gov/authorities/subjects/sh2007003224",
-    "url": "http://skos.europeana.eu/api",
-    "concepts": "OpenSKOS.php"
   },
   {
     "prefLabel": {
@@ -57,7 +50,7 @@
     },
     "example": "http://sws.geonames.org/2918632/",
     "url": "http://www.geonames.org/",
-    "bartoc": "http://bartoc.org/en/node/1674",
+    "uri": "http://bartoc.org/en/node/1674",
     "concepts": "Geonames.php"
   },
   {
@@ -65,6 +58,7 @@
       "de": "BARTOC"
     },
     "example": "http://bartoc.org/en/node/109",
+    "uri": "http://bartoc.org/en/node/2054",
     "url": "http://bartoc.org/",
     "concepts": "BARTOC.php"
   }

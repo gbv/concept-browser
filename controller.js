@@ -1,11 +1,13 @@
 /**
  * Web interface des Normdatendienst.
  */
-var normdatendienst = angular.module('Normdatendienst', 
+var normdatendienst = angular.module('Normdatendienst',
     ['ngSKOS', 'ui.bootstrap', 'angular-loading-bar']);
 
 // configure
-normdatendienst.config(['$httpProvider','cfpLoadingBarProvider', function($httpProvider, cfpLoadingBarProvider) {
+normdatendienst.config(
+  ['$httpProvider','cfpLoadingBarProvider','$locationProvider',
+  function($httpProvider, cfpLoadingBarProvider, $locationProvider) {
 
   // TODO: explain this
   $httpProvider.defaults.useXDomain = true;
@@ -15,11 +17,13 @@ normdatendienst.config(['$httpProvider','cfpLoadingBarProvider', function($httpP
   cfpLoadingBarProvider.includeSpinner = false;
   cfpLoadingBarProvider.parentSelector = '#loading-bar-container';
 
+  // use query parameter URLs in browsing history
+  $locationProvider.html5Mode({enabled:true,requireBase:false});
 }]);
 
-normdatendienst.controller('conceptBrowserController', 
-  ['$scope','$http','$httpParamSerializer','$q', '$sce', 
-  function ($scope, $http, $httpParamSerializer, $q, $sce) {
+normdatendienst.controller('conceptBrowserController',
+  ['$scope','$http','$httpParamSerializer','$location','$q', '$sce','$timeout',
+  function ($scope, $http, $httpParamSerializer, $location, $q, $sce, $timeout) {
 
   // configure base URL
   if (!$scope.baseURL) {
@@ -38,8 +42,9 @@ normdatendienst.controller('conceptBrowserController',
     response.data.forEach(function(scheme) {
 	  scheme.concepts = $scope.baseURL + scheme.concepts;
     });
-    $scope.schemes = response.data;      
-    $scope.selectScheme($scope.schemes[0]);
+    $scope.schemes = response.data;
+    $scope.selectScheme(searchedScheme(), $location.search().uri);
+
     statusMessage("got list of concept schemes from <a href='"+schemesURL+"'>"+schemesURL+"</a>");
   }, function(response) {
     statusMessage("failed to load list of concept schemes");
@@ -51,18 +56,37 @@ normdatendienst.controller('conceptBrowserController',
     isopen: false
   };
   $scope.language = "de";
- 
+
   $scope.selectURI = function(uri){
     $scope.activeURI = angular.copy(uri);
   }
 
-  $scope.selectScheme = function(scheme){
-    $scope.activeScheme = scheme;
+  // select a(nother) concept scheme
+  $scope.selectScheme = function(scheme, example) {
+    if (!scheme) scheme = $scope.schemes[0];
+    if (!scheme || $scope.activeScheme === scheme) return;
+
+    $scope.activeScheme  = scheme;
     $scope.activeConcept = null;
-    $scope.activeURI = "";
-    if(scheme.example){
-      $scope.activeURI = angular.copy(scheme.example);
-    }
+
+    if (!example) example = scheme.example;    
+
+    // update location
+    $timeout(function () {
+      $location.search({scheme:scheme.uri, uri: example});
+    });
+  }
+
+  $scope.$on('$locationChangeSuccess', function() {
+    $scope.selectScheme(searchedScheme())
+    $scope.activeURI = $location.search().uri;
+  });
+   
+  function searchedScheme() {
+    var search = $location.search();
+    return $scope.schemes.find(function(s) {
+      return s.uri == search.scheme;
+    });
   }
 
   // load concepts without labels or notations
@@ -87,6 +111,11 @@ normdatendienst.controller('conceptBrowserController',
   };
 
   $scope.getConcept = function(uri) {
+
+    // update location
+    var scheme = $location.search().scheme;
+    $location.search({scheme:scheme, uri:uri});
+
     var url = $scope.activeScheme.concepts + '?' + $httpParamSerializer({ uri:uri });
     $scope.apiURL = url;
     $http.get(url).success(function(data, status, headers) {
@@ -115,6 +144,6 @@ normdatendienst.controller('conceptBrowserController',
   $scope.browseConcept = function(concept){
     $scope.getConcept(concept.uri);
   }
-  
+
 }]);
 
