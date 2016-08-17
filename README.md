@@ -22,25 +22,58 @@ Dienst kann zeitweise nicht erreichbar sein.
 
 ## Installation und Konfiguration
 
-Zur Installation von Abhängigkeiten muss zunächst folgendes Kommando aufgerufen
-werden. Die benötigten Dateien befinden sich anschließend unter `node_modules`:
+### Voraussetzungen
 
-    npm install
+* Webserver
+* nodejs
+* JSKOS-API Webservice(s) (siehe Beispiele unter [jskos-php-examples](https://github.com/gbv/jskos-php-examples))
+* PHP (empfohlen)
 
-Die Anwendung kann sowohl als statische Webseite (`index.html`) als auch
-dynamisch als PHP-Script (`index.php`) verwendet werden. Bei der Installation
-mit PHP ist darauf zu achten, dass `index.php` statt `index.html` geladen wird.
+### Einrichtung
 
-Für die Installation unter Apache-Webserver kann beispielsweise folgender
-folgender Eintrag in der Datei `.htaccess` notwendig sein:
+Nach dem Kopieren der Anwendungsdateien in ein Webserver-Verzeichnis werden
+mit `npm install` alle benötigten JavaScript-Module in das Unterverzeichnis
+`node_modules` installiert:
+
+    $ git clone https://github.com/gbv/normdatendienst-ui.git directory
+    $ cd directory
+    $ npm install
+
+Die Anwendung ist in der Standardkonfiguration als statische Webseite
+(`index.html`) nutzbar. Die Verwendung von PHP ermöglicht darüber hinaus
+eigene Einstellungen per Konfigurationsdatei und/oder Umgebungsvariablen.
+
+### Installation mit PHP
+
+Zur Installation als dynamisches PHP-Script (`index.php`) ist darauf zu achten,
+dass `index.php` statt `index.html` geladen wird.  Für die Installation unter
+Apache-Webserver kann beispielsweise folgender folgender Eintrag in der Datei
+`.htaccess` notwendig sein:
 
     DirectoryIndex index.php index.html 
 
-Bei Verwendung als PHP-Script kann mit der Umgebungsvariable `SCHEMES_BASE_URL`
-eine Basis-URL für Normdatendienste festgelegt werden.  Standardmäßig und
-Verwendung als Webinterface als statische HTML-Seite wird der Wert
-<http://localhost:8080/> verwendet. Die Test-Installation auf Heroku
-verwendet dagegen <https://jskos-php-examples.herokuapp.com/>.
+Falls eine Datei mit dem Namen `config.php` existiert wird diese geladen, um
+die PHP-Variable `$config` zu setzen. Im einfachsten Fall definiert die Datei
+einfach ein entsprechendes Array:
+
+~~~php
+<?php
+$config = [
+  'SCHEMES_BASE_URL' => 'http://example.org/',
+  ...
+];
+~~~
+
+Einträge in der Konfigurationsdatei können per Umgebungsvariable überschrieben
+werden. Beispielsweise verwendet setzt die Testinstallation unter 
+<https://normdatendienst.herokuapp.com/> die Variable SCHEMES_BASE_URL
+auf <https://jskos-php-examples.herokuapp.com/>.
+
+## Konfiguration
+
+* **SCHEMES_BASE_URL**: 
+  Basis-URL für Webservices die in `schemes.json` beschrieben sind.
+  Standardmäßig wird der Wert <http://localhost:8080/> verwendet.
 
 ## Feedback
 

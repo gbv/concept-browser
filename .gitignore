@@ -10,3 +10,6 @@ composer.phar
 
 # npm
 node_modules/
+
+# local config file
+config.php
