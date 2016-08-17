@@ -43,7 +43,7 @@ normdatendienst.controller('conceptBrowserController',
 	  scheme.concepts = $scope.baseURL + scheme.concepts;
     });
     $scope.schemes = response.data;
-    $scope.selectScheme(searchedScheme(), $location.search().uri);
+    $scope.selectScheme(searchedScheme(), $location.search().concept);
 
     statusMessage("got list of concept schemes from <a href='"+schemesURL+"'>"+schemesURL+"</a>");
   }, function(response) {
@@ -73,13 +73,13 @@ normdatendienst.controller('conceptBrowserController',
 
     // update location
     $timeout(function () {
-      $location.search({scheme:scheme.uri, uri: example});
+      $location.search({scheme:scheme.uri, concept: example});
     });
   }
 
   $scope.$on('$locationChangeSuccess', function() {
     $scope.selectScheme(searchedScheme())
-    $scope.activeURI = $location.search().uri;
+    $scope.activeURI = $location.search().concept;
   });
    
   function searchedScheme() {
@@ -114,7 +114,7 @@ normdatendienst.controller('conceptBrowserController',
 
     // update location
     var scheme = $location.search().scheme;
-    $location.search({scheme:scheme, uri:uri});
+    $location.search({scheme:scheme, concept:uri});
 
     var url = $scope.activeScheme.concepts + '?' + $httpParamSerializer({ uri:uri });
     $scope.apiURL = url;
