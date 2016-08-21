@@ -40,7 +40,7 @@
   <div class="col-md-12">
     <ul class="list-group">
       <li ng-repeat="c in broader" class="list-group-item">
-        <span class="glyphicon glyphicon-arrow-up" style="float:left; padding-right: 5px"></span>
+        <span class="glyphicon glyphicon-arrow-up" style="float:left; padding-right: 5px" title="broader concept"></span>
         <span skos-concept="c" skos-click="click" template-url="sub-concept.html"/>
       </li>
     </ul>
@@ -51,7 +51,7 @@
   <div class="col-md-12">
     <ul class="list-group">
       <li ng-repeat="c in narrower" class="list-group-item">
-        <span class="glyphicon glyphicon-arrow-down" style="float:left; padding-right: 5px"></span>
+        <span class="glyphicon glyphicon-arrow-down" style="float:left; padding-right: 5px" title="narrower concept"></span>
         <span skos-concept="c" skos-click="click" template-url="sub-concept.html"/>
       </li>
     </ul>
@@ -64,7 +64,7 @@
       <ul class="list-group">
         <!-- TODO: use bootstrap linked list instead -->
         <li ng-repeat="c in previous" class="list-group-item">
-          <span class="glyphicon glyphicon-arrow-left" style="float:left; padding-right: 5px"></span>
+          <span class="glyphicon glyphicon-arrow-left" style="float:left; padding-right: 5px" title="previous concept"></span>
           <span skos-concept="c" skos-click="click" template-url="sub-concept.html"/>
         </li>
       </ul>
@@ -73,7 +73,7 @@
   <div class="col-md-6" ng-if="next.length">
     <ul class="list-group">
       <li ng-repeat="c in next" class="list-group-item">
-        <span class="glyphicon glyphicon-arrow-right" style="float:right"></span>
+        <span class="glyphicon glyphicon-arrow-right" style="float:right" title="next concept"></span>
         <span skos-concept="c" skos-click="click" template-url="sub-concept.html"/>
       </li>
     </ul>
@@ -84,13 +84,13 @@
   <div class="col-md-12">
     <ul class="list-group" ng-if="related.length">
       <li ng-repeat="c in related" class="list-group-item">
-        <span class="glyphicon glyphicon-hand-right" style="float:left; padding-right: 5px"></span>
+        <span class="glyphicon glyphicon-hand-right" style="float:left; padding-right: 5px" title="related concept"></span>
         <span skos-concept="c" skos-click="click" template-url="sub-concept.html"/>
       </li>
     </ul>
     <ul class="list-group" ng-if="relatedPlace.length">
       <li ng-repeat="c in relatedPlace" class="list-group-item">
-        <span class="glyphicon glyphicon-globe" style="float:left; padding-right: 5px"></span>
+        <span class="glyphicon glyphicon-globe" style="float:left; padding-right: 5px" title="related concept"></span>
         <span skos-concept="c" skos-click="click" template-url="sub-concept.html" />
       </li>
     </ul>

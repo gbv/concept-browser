@@ -33,7 +33,10 @@ normdatendienst.controller('conceptBrowserController',
   var statusMessage = function(html) {
      $scope.$parent.status = $sce.trustAsHtml(html);
   }
-
+  $scope.schemeInfo = false;
+  $scope.showSchemeInfo = function(){
+    $scope.schemeInfo = !$scope.schemeInfo;
+  }
   // load list of known concept schemes
   statusMessage("initializing...");
   $scope.schemes = [];
@@ -52,6 +55,7 @@ normdatendienst.controller('conceptBrowserController',
 
   // further initalization of controller
   $scope.activeConcept = null;
+  $scope.schemeDetails = null;
   $scope.status = {
     isopen: false
   };
@@ -60,14 +64,15 @@ normdatendienst.controller('conceptBrowserController',
   $scope.selectURI = function(uri){
     $scope.activeURI = angular.copy(uri);
   }
-
   // select a(nother) concept scheme
   $scope.selectScheme = function(scheme, example) {
     if (!scheme) scheme = $scope.schemes[0];
     if (!scheme || $scope.activeScheme === scheme) return;
-
+    $scope.schemeInfo = false;
+    $scope.schemeDetails = null;
     $scope.activeScheme  = scheme;
     $scope.activeConcept = null;
+    $scope.getSchemeDetails(scheme.uri);
 
     if (!example) example = scheme.example;    
 
@@ -78,7 +83,7 @@ normdatendienst.controller('conceptBrowserController',
   }
 
   $scope.$on('$locationChangeSuccess', function() {
-    $scope.selectScheme(searchedScheme())
+    $scope.selectScheme(searchedScheme());
     $scope.activeURI = $location.search().concept;
   });
    
@@ -135,9 +140,24 @@ normdatendienst.controller('conceptBrowserController',
         deferred.resolve(concept);
       }
       $scope.activeConcept = concept;
-      statusMessage("Konzept geladen");
+      if($scope.activeConcept){
+        statusMessage("Konzept geladen");
+      }else{
+        statusMessage("Konzept nicht gefunden");
+      }
     }).error(function(data, status, headers){
       statusMessage("HTTP-Anfrage fehlgeschlagen!");
+    });
+  }
+  
+  $scope.getSchemeDetails = function(uri){
+    var url = $scope.baseURL + "BARTOC.php?" + $httpParamSerializer({ uri:uri });
+    $http.get(url).success(function(data, status, headers) {
+      var scheme = data[0];
+      if (scheme) {
+        $scope.schemeDetails = scheme;
+      }
+    }).error(function(data, status, headers){
     });
   }
 
