@@ -22,8 +22,16 @@ footer{
   position: relative;
 }
 
+table{
+  margin:10px;
+  border-spacing:0px 20px;
+}
 th{
   white-space: nowrap;
   padding-right: 10px;
   vertical-align: top;
+}
+
+td th{
+  padding-top:5px;
 }

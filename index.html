@@ -65,16 +65,18 @@
           <div class="col-sm-2">
           </div>
           <div class="col-sm-10">
-            <button class="btn btn-primary" ng-if="!schemeInfo && schemeDetails" ng-click="showSchemeInfo()" ng-disabled="!schemeDetails"><span>Info </span><span class="glyphicon glyphicon-chevron-down"></span></button>
             <div ng-if="schemeInfo && schemeDetails" class="table-responsive">
-              <table style="margin:10px;">
+              <table>
                 <tr ng-if="schemeDetails.license"><th>Lizenz</th><td><a href="{{schemeDetails.license[0].uri}}" target="_blank">{{schemeDetails.license[0].uri}}</a></td></tr>
                 <tr ng-if="schemeDetails.url"><th>Homepage</th><td><a href="{{schemeDetails.url}}" target="_blank">{{schemeDetails.url}}</a></td></tr>
                 <tr ng-if="schemeDetails.uri"><th>BARTOC-Link</th><td><a href="{{schemeDetails.uri}}" target="_blank">{{schemeDetails.uri}}</a></td></tr>
                 <tr ng-if="schemeDetails.type"><th>Typ</th><td><div ng-repeat="t in schemeDetails.type" style="margin-right:6px;"><a href="{{t}}" target="_blank">{{t}}</a></div></td></tr>
               </table>
             </div>
-            <button class="btn btn-primary" ng-if="schemeInfo && schemeDetails" ng-click="showSchemeInfo()" ng-disabled="!schemeDetails"><span>Info </span><span class="glyphicon glyphicon-chevron-up"></span></button>
+            <button class="btn btn-primary" ng-click="showSchemeInfo()" ng-if="schemeDetails">
+              <span>Info </span>
+              <span ng-if="!schemeInfo" class="glyphicon glyphicon-chevron-down"></span>
+              <span ng-if="schemeInfo" class="glyphicon glyphicon-chevron-up"></span></button>
           </div>
         </div>
         <div class="form-group">
