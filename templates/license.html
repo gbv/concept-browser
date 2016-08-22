@@ -1,0 +1,4 @@
+<span ng-if="license">
+  <img ng-if="license.img" ng-src="{{license.img}}"/>
+  <b ng-if="!license.img && license.notation[0]">{{license.notation[0]}}</b>
+</span>

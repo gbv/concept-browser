@@ -1,0 +1,35 @@
+<div class="table-responsive">
+  <table>
+    <tr ng-if="scheme.creator">
+      <th>Urheber</th>
+      <td>
+        <div ng-repeat="c in scheme.creator" style="margin-right:6px;"><a href="{{c.uri}}">{{c.uri}}</a></div>
+      </td>
+    </tr>
+    <tr ng-if="scheme.license">
+      <th>Lizenz</th>
+      <td><a href="{{scheme.license[0].uri}}">{{scheme.license[0].uri}}</a></td>
+    </tr>
+    <tr ng-if="scheme.url">
+      <th>Homepage</th>
+      <td><a href="{{scheme.url}}">{{scheme.url}}</a></td>
+    </tr>
+    <tr ng-if="scheme.uri">
+      <th>URI (BARTOC)</th>
+      <td><a href="{{scheme.uri}}">{{scheme.uri}}</a></td>
+    </tr>
+    <tr ng-if="scheme.type">
+      <th>Typ</th>
+      <td>
+        <div ng-repeat="t in scheme.type" style="margin-right:6px;"><a href="{{t}}">{{t}}</a></div>
+      </td>
+    </tr>
+    <tr ng-if="scheme.identifier.length">
+      <th>Identifier</th>
+      <td>
+        <div ng-repeat="uri in scheme.identifier" style="margin-right:6px;"><a href="{{uri}}">{{uri}}</a></div>
+      </td>
+    </tr>
+  </table>
+</div>
+

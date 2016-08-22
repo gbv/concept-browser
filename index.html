@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Normdatendienst</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/font-awesome.min.css">
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -27,7 +26,7 @@
     <link rel="stylesheet" href="normdatendienst.css">
 
   </head>
-  <body ng-app="Normdatendienst">
+  <body ng-app="terminologiesUI">
     <div class="container">
       <div class="page-header">
         <h1>Normdatendienst</h1>
@@ -37,22 +36,30 @@
         This page allows the browsing through concepts of several Knowledge Organization Systems.
       </p-->
 
-      <div ng-controller="conceptBrowserController" ng-init="baseURL='http://localhost:8080/'">
+      <div ng-controller="ConceptBrowserController" ng-init="baseURL='http://localhost:8080/'">
       <form class="form-horizontal">
         <div class="form-group">
           <label for="terminology" class="col-sm-2 control-label hidden-xs">Normdatei</label>
           <div class="col-sm-10">
-            <div class="input-group" uib-dropdown keyboard-nav  style="width:100%;">
+            <div class="input-group" uib-dropdown keyboard-nav style="width:100%;">
               <button id="split-button" type="button" uib-dropdown-toggle
-                      class="btn" style="width:100%; text-align: left">
+                      class="btn btn-default" 
+                      style="text-align: left; width: 100%">
                 <span ng-if="activeScheme.prefLabel" skos-label="activeScheme.prefLabel"/>
                 <span ng-if="!activeScheme.prefLabel">Select a KOS</span>
               </button>
-              <!--a type="button" class="btn btn-primary input-btn-group" uib-dropdown-toggle 
-                 style="display: table-cell;">
-                <span class="caret"></span>
-                <span class="sr-only">Split button!</span>
-              </a-->
+
+              <span class="input-group-btn">
+                <button ng-if="schemeDetails.license[0].uri" 
+                        ng-click="schowSchemeInfo()" class="btn btn-link"
+                        license-button="schemeDetails.license[0].uri">
+                </button>
+                <button ng-click="showSchemeInfo()" class="btn btn-link">
+                  <span ng-if="!schemeInfo" class="glyphicon glyphicon-chevron-down"></span>
+                  <span ng-if="schemeInfo" class="glyphicon glyphicon-chevron-up"></span></button>
+                </button>
+              </span>
+
               <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="single-button">
                 <li ng-repeat="s in schemes">
                   <a href="#" ng-click="selectScheme(s)" skos-label="s.prefLabel"></a>
@@ -61,29 +68,19 @@
             </div>
           </div>
         </div>
-        <div style="min-height:35px;" class="form-group">
+
+        <div class="row" ng-if="schemeInfo" style="margin-top:-15px">
           <div class="col-sm-2">
           </div>
-          <div class="col-sm-10">
-            <div ng-if="schemeInfo && schemeDetails" class="table-responsive">
-              <table>
-                <tr ng-if="schemeDetails.license"><th>Lizenz</th><td><a href="{{schemeDetails.license[0].uri}}" target="_blank">{{schemeDetails.license[0].uri}}</a></td></tr>
-                <tr ng-if="schemeDetails.url"><th>Homepage</th><td><a href="{{schemeDetails.url}}" target="_blank">{{schemeDetails.url}}</a></td></tr>
-                <tr ng-if="schemeDetails.uri"><th>BARTOC-Link</th><td><a href="{{schemeDetails.uri}}" target="_blank">{{schemeDetails.uri}}</a></td></tr>
-                <tr ng-if="schemeDetails.type"><th>Typ</th><td><div ng-repeat="t in schemeDetails.type" style="margin-right:6px;"><a href="{{t}}" target="_blank">{{t}}</a></div></td></tr>
-              </table>
-            </div>
-            <button class="btn btn-primary" ng-click="showSchemeInfo()" ng-if="schemeDetails">
-              <span>Info </span>
-              <span ng-if="!schemeInfo" class="glyphicon glyphicon-chevron-down"></span>
-              <span ng-if="schemeInfo" class="glyphicon glyphicon-chevron-up"></span></button>
+          <div class="col-sm-10" scheme-info="schemeDetails">
           </div>
         </div>
+
         <div class="form-group">
           <label for="search" class="col-sm-2 control-label hidden-xs">Identifier</label>
           <div class="col-sm-10">
             <div class="input-group">
-              <input type="text" name="input" style="margin-right:10px;" class="form-control" placeholder="Identifier"
+              <input type="text" name="input" class="form-control" placeholder="Identifier"
                      ng-model="activeURI" ng-change="selectURI(activeURI)"></input>
               <span class="input-group-btn">
                 <button ng-click="getConcept(activeURI)" class="btn btn-primary">
@@ -93,8 +90,10 @@
               </span>
             </div>
           </div>
+
         </div>
       </form>
+
 
       <a ng-if="apiURL" href="{{apiURL}}" style="float:right; padding-left: 5px">
         <span class="glyphicon glyphicon-cloud-download"></span>
@@ -102,7 +101,7 @@
       <hr id="loading-bar-container"/>
 
         <div ng-if="activeConcept" 
-             template-url="concept.html"
+             template-url="templates/concept.html"
              skos-concept="activeConcept" language="language" skos-click="browseConcept"></div>
         </div>
 
@@ -125,7 +124,6 @@
             <span ng-bind-html="status"></span>  
           </div>
           <div class="col-md-2 text-right text-muted">
-            <i class="fa fa-github"></i>
             <a href="https://github.com/gbv/concept-browser">sources</a>
             &amp;
             <a href="https://github.com/gbv/concept-browser/issues/">feedback?</a>

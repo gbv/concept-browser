@@ -1,7 +1,7 @@
 /**
  * Web interface des Normdatendienst.
  */
-var normdatendienst = angular.module('Normdatendienst',
+var normdatendienst = angular.module('terminologiesUI',
     ['ngSKOS', 'ui.bootstrap', 'angular-loading-bar']);
 
 // configure
@@ -21,7 +21,50 @@ normdatendienst.config(
   $locationProvider.html5Mode({enabled:true,requireBase:false});
 }]);
 
-normdatendienst.controller('conceptBrowserController',
+/**
+ * Show license information in short form.
+ **/
+normdatendienst.directive('licenseButton', function() {
+  // TODO: load from another service
+  var licenses = {
+    'http://creativecommons.org/publicdomain/zero/1.0/': {
+        img: 'http://mirrors.creativecommons.org/presskit/buttons/80x15/svg/publicdomain.svg', 
+        notation: ['CC 0']
+    },
+    'http://creativecommons.org/licenses/by/3.0/': {
+        img: 'http://mirrors.creativecommons.org/presskit/buttons/80x15/svg/by.svg',
+        notation: ['CC BY']
+    }
+  };
+
+  return {
+    restrict: 'A',
+    templateUrl: 'templates/license.html',
+    scope: {
+      uri: '=licenseButton',
+    },
+    link: function(scope) {
+      function updateLicense() {
+        scope.license = licenses[scope.uri];
+        // TODO: handle unknown license
+      }
+      scope.$watch('licenses', updateLicense);
+      scope.$watch('uri', updateLicense);
+    }
+  };
+});
+
+normdatendienst.directive('schemeInfo', function() {
+  return {
+    restrict: 'A',
+    templateUrl: 'templates/scheme.html',
+    scope: {
+      scheme: '=schemeInfo',
+    }
+  };
+});
+
+normdatendienst.controller('ConceptBrowserController',
   ['$scope','$http','$httpParamSerializer','$location','$q', '$sce','$timeout',
   function ($scope, $http, $httpParamSerializer, $location, $q, $sce, $timeout) {
 
@@ -33,10 +76,12 @@ normdatendienst.controller('conceptBrowserController',
   var statusMessage = function(html) {
      $scope.$parent.status = $sce.trustAsHtml(html);
   }
+
   $scope.schemeInfo = false;
   $scope.showSchemeInfo = function(){
     $scope.schemeInfo = !$scope.schemeInfo;
   }
+
   // load list of known concept schemes
   statusMessage("initializing...");
   $scope.schemes = [];
@@ -64,11 +109,12 @@ normdatendienst.controller('conceptBrowserController',
   $scope.selectURI = function(uri){
     $scope.activeURI = angular.copy(uri);
   }
+
   // select a(nother) concept scheme
   $scope.selectScheme = function(scheme, example) {
     if (!scheme) scheme = $scope.schemes[0];
     if (!scheme || $scope.activeScheme === scheme) return;
-    $scope.schemeInfo = false;
+
     $scope.schemeDetails = null;
     $scope.activeScheme  = scheme;
     $scope.activeConcept = null;
@@ -152,12 +198,11 @@ normdatendienst.controller('conceptBrowserController',
   
   $scope.getSchemeDetails = function(uri){
     var url = $scope.baseURL + "BARTOC.php?" + $httpParamSerializer({ uri:uri });
-    $http.get(url).success(function(data, status, headers) {
+    $http.get(url).success(function(data) {
       var scheme = data[0];
       if (scheme) {
         $scope.schemeDetails = scheme;
       }
-    }).error(function(data, status, headers){
     });
   }
 
