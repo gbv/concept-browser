@@ -9,12 +9,16 @@ body {
   margin-bottom: 32px;
 }
 
-footer{
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  height: 32px;
-  border-top: 12px solid rgb(103, 145, 201);
+/* sticky footer */
+footer.navbar-fixed-bottom {
+  background-color: #577FBB;
+  color: #fff;
+  min-height: 0px;
+}
+footer.navbar-fixed-bottom a, 
+footer.navbar-fixed-bottom a:hover,
+footer.navbar-fixed-bottom a:visited {
+  color: #fff;
 }
 
 /* loading bar */
@@ -22,17 +26,29 @@ footer{
   position: relative;
 }
 
-table{
-  margin:10px;
-  border-spacing:0px 20px;
+/* table with scheme information */
+.table-more-condensed {
+    width: auto !important;
 }
-th{
-  white-space: nowrap;
-  padding-right: 10px;
-  vertical-align: top;
+.table-more-condensed th, .table-more-condensed td { 
+    border-top: none !important; 
 }
 
-td th{
-  padding-top:5px;
+/* button with big icon */
+.big-text-button {
+  font-size: 20px;
+  padding: 2px 8px;
+}
+
+/* more condense elements in concept browser */
+.concept-browser {
+  margin: 1em;
+}
+.concept-browser .list-group-item {
+  border: none;
+  padding: 5px 7px
+}
+.concept-browser .list-group {
+  margin-bottom: 0px
 }
 

@@ -1,11 +1,11 @@
 /**
  * Web interface des Normdatendienst.
  */
-var normdatendienst = angular.module('terminologiesUI',
+var app = angular.module('terminologiesUI',
     ['ngSKOS', 'ui.bootstrap', 'angular-loading-bar']);
 
 // configure
-normdatendienst.config(
+app.config(
   ['$httpProvider','cfpLoadingBarProvider','$locationProvider',
   function($httpProvider, cfpLoadingBarProvider, $locationProvider) {
 
@@ -24,7 +24,7 @@ normdatendienst.config(
 /**
  * Show license information in short form.
  **/
-normdatendienst.directive('licenseButton', function() {
+app.directive('licenseButton', function() {
   // TODO: load from another service
   var licenses = {
     'http://creativecommons.org/publicdomain/zero/1.0/': {
@@ -54,7 +54,7 @@ normdatendienst.directive('licenseButton', function() {
   };
 });
 
-normdatendienst.directive('schemeInfo', function() {
+app.directive('schemeInfo', function() {
   return {
     restrict: 'A',
     templateUrl: 'templates/scheme.html',
@@ -64,26 +64,26 @@ normdatendienst.directive('schemeInfo', function() {
   };
 });
 
-normdatendienst.controller('ConceptBrowserController',
-  ['$scope','$http','$httpParamSerializer','$location','$q', '$sce','$timeout',
-  function ($scope, $http, $httpParamSerializer, $location, $q, $sce, $timeout) {
+app.controller('ConceptBrowserController',
+  ['$scope','$http','$httpParamSerializer','$location','$q', '$timeout',
+  function ($scope, $http, $httpParamSerializer, $location, $q, $timeout) {
 
   // configure base URL
   if (!$scope.baseURL) {
     $scope.baseURL = 'http://localhost:8080/';
   }
 
-  var statusMessage = function(html) {
-     $scope.$parent.status = $sce.trustAsHtml(html);
-  }
-
   $scope.schemeInfo = false;
-  $scope.showSchemeInfo = function(){
+  $scope.toggleSchemeInfo = function(){
     $scope.schemeInfo = !$scope.schemeInfo;
   }
 
+  $scope.conceptInfo = false;
+  $scope.toggleConceptInfo = function(){
+    $scope.conceptInfo = !$scope.conceptInfo;
+  }
+
   // load list of known concept schemes
-  statusMessage("initializing...");
   $scope.schemes = [];
   var schemesURL = 'schemes.json';
   $http.get(schemesURL).then(function(response){
@@ -92,10 +92,8 @@ normdatendienst.controller('ConceptBrowserController',
     });
     $scope.schemes = response.data;
     $scope.selectScheme(searchedScheme(), $location.search().concept);
-
-    statusMessage("got list of concept schemes from <a href='"+schemesURL+"'>"+schemesURL+"</a>");
   }, function(response) {
-    statusMessage("failed to load list of concept schemes");
+    // TODO: show error message
   });
 
   // further initalization of controller
@@ -186,13 +184,8 @@ normdatendienst.controller('ConceptBrowserController',
         deferred.resolve(concept);
       }
       $scope.activeConcept = concept;
-      if($scope.activeConcept){
-        statusMessage("Konzept geladen");
-      }else{
-        statusMessage("Konzept nicht gefunden");
-      }
     }).error(function(data, status, headers){
-      statusMessage("HTTP-Anfrage fehlgeschlagen!");
+      // TODO: show error message
     });
   }
   
@@ -212,3 +205,7 @@ normdatendienst.controller('ConceptBrowserController',
 
 }]);
 
+ 
+app.filter('prettyJSON', function () {
+  return function(json) { return angular.toJson(json, true); }
+});

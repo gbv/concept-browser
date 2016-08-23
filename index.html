@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -28,13 +28,10 @@
   </head>
   <body ng-app="terminologiesUI">
     <div class="container">
+
       <div class="page-header">
         <h1>Normdatendienst</h1>
       </div>
-
-      <!--p>
-        This page allows the browsing through concepts of several Knowledge Organization Systems.
-      </p-->
 
       <div ng-controller="ConceptBrowserController" ng-init="baseURL='http://localhost:8080/'">
       <form class="form-horizontal">
@@ -54,7 +51,7 @@
                         ng-click="schowSchemeInfo()" class="btn btn-link"
                         license-button="schemeDetails.license[0].uri">
                 </button>
-                <button ng-click="showSchemeInfo()" class="btn btn-link">
+                <button ng-click="toggleSchemeInfo()" class="btn btn-link big-text-button">
                   <span ng-if="!schemeInfo" class="glyphicon glyphicon-chevron-down"></span>
                   <span ng-if="schemeInfo" class="glyphicon glyphicon-chevron-up"></span></button>
                 </button>
@@ -72,7 +69,8 @@
         <div class="row" ng-if="schemeInfo" style="margin-top:-15px">
           <div class="col-sm-2">
           </div>
-          <div class="col-sm-10" scheme-info="schemeDetails">
+          <div class="col-sm-10">
+            <div scheme-info="schemeDetails"></div>
           </div>
         </div>
 
@@ -100,30 +98,43 @@
       </a>
       <hr id="loading-bar-container"/>
 
-        <div ng-if="activeConcept" 
-             template-url="templates/concept.html"
-             skos-concept="activeConcept" language="language" skos-click="browseConcept"></div>
-        </div>
+      <div ng-if="activeConcept">
+         <div class="concept-browser"
+           template-url="templates/concept.html"
+           skos-concept="activeConcept" language="language" skos-click="browseConcept"></div>
+         <hr>
 
-        <!--div ng-if="!activeConcept" class="row">
-          <p>Kein Normdatensatz vorhanden</p>
-        </div-->
-        <div ng-if="schemeDetails" class="row">
-          <div class="col-md-12">
-          </div>
-        </div>
+         <div id="concept-details">
+           <ul class="nav nav-tabs" role="tablist">
+             <li role="presentation">
+               <a href="#" role="tab" ng-click="toggleConceptInfo()">JSON</a>
+             </li>
+             <!-- TODO: metadata, mappings, content, ... -->
+           </ul>
+         </div>
+         <div class="tab-content" ng-if="conceptInfo">
+           <div role="tabpanel" class="tab-pane active" id="json">
+             <pre>{{activeConcept | prettyJSON }}</pre>
+           </div>
+         </div>
       </div>
+
+      <!--div ng-if="!activeConcept" class="row">
+        <p>Kein Normdatensatz vorhanden</p>
+      </div-->
+
     </div>
 
-    <footer>
+
+    <footer class="navbar navbar-default navbar-fixed-bottom">
       <div class="container">
         <div class="row">
-        </div>
-        <div class="row">
-          <div class="col-md-10 text-muted">
-            <span ng-bind-html="status"></span>  
+          <div class="col-sm-8">
+            <img src="img/vzglogo.png" alt="VZG" class="hidden-xs" height="38" width="88">
+            <a href="">Verbundzentrale des GBV</a>
+            <span class="visible-xs-inline">(VZG)</span> 
           </div>
-          <div class="col-md-2 text-right text-muted">
+          <div class="col-sm-4" class="hidden-xs">
             <a href="https://github.com/gbv/concept-browser">sources</a>
             &amp;
             <a href="https://github.com/gbv/concept-browser/issues/">feedback?</a>

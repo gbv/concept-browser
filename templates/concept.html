@@ -32,6 +32,11 @@
     <!-- TODO: select by language, only show a limited number -->
     <div skos-notes="concept" lang="{{language}}"></div>
    
+    <div ng-if="depiction && depiction.length">
+      <!-- TODO: show image credits -->
+      <img ng-src="{{depiction[0]}}" class="img-responsive">
+    </div>
+
   </div>
 </div>
 
