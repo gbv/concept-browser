@@ -24,6 +24,10 @@
   </div>
   <div class="col-md-6">
 
+    <div ng-if="url">
+      <a href="{{url}}">{{url}}</a>
+    </div>
+
     <div ng-if="startDate || endDate">
       <span class="glyphicon glyphicon-time"></span>
       {{startDate}}-{{endDate}}
