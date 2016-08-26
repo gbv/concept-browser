@@ -59,7 +59,7 @@ app.directive('licenseButton', function() {
     'http://creativecommons.org/licenses/by-nd/3.0/': {
         img: 'http://mirrors.creativecommons.org/presskit/buttons/80x15/svg/by-nd.svg',
         notation: ['CC BY-ND 3.0']
-    }
+    },
     'http://creativecommons.org/licenses/by-nd/4.0/': {
         img: 'http://mirrors.creativecommons.org/presskit/buttons/80x15/svg/by-nd.svg',
         notation: ['CC BY-ND 4.0']
@@ -67,7 +67,7 @@ app.directive('licenseButton', function() {
     'http://creativecommons.org/licenses/by-nc/3.0/': {
         img: 'http://mirrors.creativecommons.org/presskit/buttons/80x15/svg/by-nc.svg',
         notation: ['CC BY-NC 3.0']
-    }
+    },
     'http://creativecommons.org/licenses/by-nc/4.0/': {
         img: 'http://mirrors.creativecommons.org/presskit/buttons/80x15/svg/by-nc.svg',
         notation: ['CC BY-NC 4.0']
@@ -75,7 +75,7 @@ app.directive('licenseButton', function() {
     'http://creativecommons.org/licenses/by-nc-sa/3.0/': {
         img: 'http://mirrors.creativecommons.org/presskit/buttons/80x15/svg/by-nc-sa.svg',
         notation: ['CC BY-NC-SA 3.0']
-    }
+    },
     'http://creativecommons.org/licenses/by-nc-sa/4.0/': {
         img: 'http://mirrors.creativecommons.org/presskit/buttons/80x15/svg/by-nc-sa.svg',
         notation: ['CC BY-NC-SA 4.0']
@@ -83,7 +83,7 @@ app.directive('licenseButton', function() {
     'http://creativecommons.org/licenses/by-nc-nd/3.0/': {
         img: 'http://mirrors.creativecommons.org/presskit/buttons/80x15/svg/by-nc-nd.svg',
         notation: ['CC BY-NC-ND 3.0']
-    }
+    },
     'http://creativecommons.org/licenses/by-nc-nd/4.0/': {
         img: 'http://mirrors.creativecommons.org/presskit/buttons/80x15/svg/by-nc-nd.svg',
         notation: ['CC BY-NC-ND 4.0']

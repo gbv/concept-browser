@@ -30,7 +30,9 @@
     <div class="container">
 
       <div class="page-header">
-        <h1>Normdatendienst</h1>
+        <h1>Normdatendienst
+          <small ng-click="hideBeta=true" ng-show="!hideBeta">beta preview</small>
+        </h1>
       </div>
 
       <div ng-controller="ConceptBrowserController" ng-init="baseURL='http://localhost:8080/'">
