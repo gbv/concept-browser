@@ -155,7 +155,7 @@ app.controller('ConceptBrowserController',
   $scope.status = {
     isopen: false
   };
-  $scope.language = "de";
+  $scope.language = "de,en";
 
   $scope.selectURI = function(uri){
     $scope.activeURI = angular.copy(uri);
@@ -165,7 +165,7 @@ app.controller('ConceptBrowserController',
   $scope.selectScheme = function(scheme, example) {
     if (!scheme) scheme = $scope.schemes[0];
     if (!scheme || $scope.activeScheme === scheme) return;
-
+    console.log(scheme);
     $scope.schemeDetails = null;
     $scope.activeScheme  = scheme;
     $scope.activeConcept = null;
