@@ -40,17 +40,19 @@
         <div class="form-group">
           <label for="terminology" class="col-sm-2 control-label hidden-xs">Normdatei</label>
           <div class="col-sm-10">
-            <div class="input-group" uib-dropdown keyboard-nav style="width:100%;">
+            <div ng-if="!schemes.length">
+              <button type="button" class="btn btn-link" disabled>Liste wird geladen...</button>
+            </div>
+            <div class="input-group" keyboard-nav style="width:100%;" ng-if="schemes.length">
               <button id="split-button" type="button" uib-dropdown-toggle
                       class="btn btn-default" 
                       style="text-align: left; width: 100%">
-                <span ng-if="activeScheme.prefLabel" skos-label="activeScheme.prefLabel"/>
-                <span ng-if="!activeScheme.prefLabel">Select a KOS</span>
+                <span skos-label="activeScheme.prefLabel" lang="{{language}},en,*"/>
               </button>
 
-              <span class="input-group-btn">
+              <span class="input-group-btn" ng-show="schemeDetails">
                 <button ng-if="schemeDetails.license[0].uri" 
-                        ng-click="schowSchemeInfo()" class="btn btn-link"
+                        ng-click="toggleSchemeInfo()" class="btn btn-link"
                         license-button="schemeDetails.license[0].uri">
                 </button>
                 <button ng-click="toggleSchemeInfo()" class="btn btn-link big-text-button">

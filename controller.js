@@ -201,8 +201,7 @@ app.controller('ConceptBrowserController',
       if (c.notation && c.notation.length && c.notation[0] !== null) return;
 
       var url = $scope.activeScheme.concepts + "?uri=" + c.uri + "&properties=prefLabel,notation";
-      $http.get( url )
-      .then(function(response) {
+      $http.get( url ).then(function(response) {
         var got = response.data[0];
         if (!got) return; // not found
         // TODO: better merge instead of overwriting
@@ -229,7 +228,7 @@ app.controller('ConceptBrowserController',
           loadLabels(concept[field]);
         });
 
-        // TODO: get depiction
+        // TODO: get depiction with attribution
         // TODO: what about altLabel and other literals?
         // TODO: what about ancestors?
         // TODO: what about subjectOf?
@@ -244,12 +243,9 @@ app.controller('ConceptBrowserController',
   
   $scope.getSchemeDetails = function(uri){
     var url = $scope.baseURL + "BARTOC.php?" + $httpParamSerializer({ uri:uri });
-    $http.get(url).success(function(data) {
-      var scheme = data[0];
-      if (scheme) {
-        $scope.schemeDetails = scheme;
-      }
-    });
+    $http.get(url).then(function(response) {
+      $scope.schemeDetails = response.data[0];
+    }); // TODO: error
   }
 
   $scope.browseConcept = function(concept){
