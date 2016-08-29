@@ -165,7 +165,6 @@ app.controller('ConceptBrowserController',
   $scope.selectScheme = function(scheme, example) {
     if (!scheme) scheme = $scope.schemes[0];
     if (!scheme || $scope.activeScheme === scheme) return;
-    console.log(scheme);
     $scope.schemeDetails = null;
     $scope.activeScheme  = scheme;
     $scope.activeConcept = null;

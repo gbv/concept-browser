@@ -47,7 +47,7 @@
                 <button id="single-button" type="button" uib-dropdown-toggle
                         class="btn btn-default" 
                         style="text-align: left; width: 80%">
-                  <span skos-label="activeScheme.prefLabel" lang="de,en,*"/>
+                  <span skos-label="activeScheme.prefLabel" lang="{{language}},en,*"/>
                 </button>
 
                 <span class="input-group-btn" ng-show="schemeDetails">
@@ -63,7 +63,7 @@
 
                 <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="single-button">
                   <li role="menuitem" ng-repeat="s in schemes">
-                    <a href="#" ng-click="selectScheme(s)" skos-label="s.prefLabel" lang="de,en,*"></a>
+                    <a href="#" ng-click="selectScheme(s)" skos-label="s.prefLabel" lang="{{language}},en,*"></a>
                   </li>
                 </ul>
               </div>
