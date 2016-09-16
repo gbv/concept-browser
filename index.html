@@ -12,6 +12,7 @@
     <![endif]-->
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0/angular-messages.min.js"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/1.3.3/ui-bootstrap-tpls.min.js"></script>
 
@@ -95,36 +96,42 @@
           </div>
         </form>
 
-
         <a ng-if="apiURL" href="{{apiURL}}" style="float:right; padding-left: 5px">
           <span class="glyphicon glyphicon-cloud-download"></span>
         </a>
         <hr id="loading-bar-container"/>
 
-        <div ng-if="activeConcept">
-          <div class="concept-browser"
-            template-url="templates/concept.html"
-            skos-concept="activeConcept" language="language" skos-click="browseConcept"></div>
-          <hr>
-
-          <div id="concept-details">
-            <ul class="nav nav-tabs" role="tablist">
-              <li role="presentation">
-                <a href="#" role="tab" ng-click="toggleConceptInfo()">JSON</a>
-              </li>
-              <!-- TODO: metadata, mappings, content, ... -->
-            </ul>
-          </div>
-          <div class="tab-content" ng-if="conceptInfo">
-            <div role="tabpanel" class="tab-pane active" id="json">
-              <pre>{{activeConcept | prettyJSON }}</pre>
-            </div>
+        <div class="alert alert-danger" ng-show="hasError()"> 
+          <a href="#" ng-click="clearErrors()" class="close">&times;</a>
+          <div ng-messages="error">
+            <div ng-messages-include='error-messages'></div>
           </div>
         </div>
 
-        <!--div ng-if="!activeConcept" class="row">
-          <p>Kein Normdatensatz vorhanden</p>
-        </div-->
+        <div ng-if="activeConcept">
+           <div class="concept-browser"
+             template-url="templates/concept.html"
+             skos-concept="activeConcept" language="language" skos-click="browseConcept"></div>
+           <hr>
+
+           <ul class="nav nav-tabs" role="tablist">
+             <li role="presentation">
+               <a href="#" ng-click="conceptInfo = true">Metadaten</a>
+             </li>
+             <li role="presentation" class="disabled">
+               <a href="#" disabled>Mappings</a>
+             </li>
+             <!--li role="presentation" class="disabled">
+               <a href="#" disabled>Inhalte</a>
+             </li-->
+           </ul>
+           <div class="tab-content" ng-if="conceptInfo">
+             <div role="tabpanel" class="tab-pane active" id="json">
+               <a href="{{activeConcept.uri}}">{{activeConcept.uri}}</a>
+               <pre>{{activeConcept | prettyJSON }}</pre>
+             </div>
+           </div>
+        </div>
 
       </div>
     </div>
@@ -134,16 +141,34 @@
         <div class="row">
           <div class="col-sm-8">
             <img src="img/vzglogo.png" alt="VZG" class="hidden-xs" height="38" width="88">
-            <a href="">Verbundzentrale des GBV</a>
+            <a href="https://www.gbv.de/">Verbundzentrale des GBV</a>
             <span class="visible-xs-inline">(VZG)</span> 
           </div>
-          <div class="col-sm-4" class="hidden-xs">
+          <div class="col-sm-4 hidden-xs text-right">
             <a href="https://github.com/gbv/concept-browser">sources</a>
-            &amp;
-            <a href="https://github.com/gbv/concept-browser/issues/">feedback?</a>
+            /
+            <a href="https://github.com/gbv/concept-browser/issues/">issues</a>
           </div>
         </div>
       </div>
     </footer>
   </body>
 </html>
+
+<script type="text/ng-template" id="error-messages">
+  <div ng-message='schemeDetailsMissing'>
+    <p><strong>Normdatei-Beschreibung nicht gefunden!</strong></p>
+    <p>Grund dafür ist vermutlich eine gestörte Internetverbindung oder ein Serverausfall.</p>
+    <p>Bitte versuchen Sie später nochmal, die Seite neu zu laden!</p>
+  </div>
+  <div ng-message='conceptNotFound'>
+    <p><strong>Normdatensatz nicht gefunden</strong></p>
+    <p>Der gesuchte Normdatensatz wurde in der ausgewählten Normdatei nicht gefunden.</p>
+    <p>Vielleicht hat eine andere Suche mehr Erfolg!</p>
+  </div>
+  <div ng-message='conceptServiceFailed'>
+    <p><strong>Normdatendienst nicht erreichbar</strong></p>
+    <p>Grund dafür ist vermutlich eine gestörte Internetverbindung oder ein Serverausfall.</p>
+    <p>Bitte versuchen Sie es später nochmal!</p>
+  </div>
+</script>

@@ -2,7 +2,7 @@
  * Web interface des Normdatendienst.
  */
 var app = angular.module('terminologiesUI',
-    ['ngSKOS', 'ui.bootstrap', 'angular-loading-bar']);
+    ['ngSKOS', 'ui.bootstrap', 'angular-loading-bar', 'ngMessages']);
 
 // configure
 app.config(
@@ -132,9 +132,6 @@ app.controller('ConceptBrowserController',
   }
 
   $scope.conceptInfo = false;
-  $scope.toggleConceptInfo = function(){
-    $scope.conceptInfo = !$scope.conceptInfo;
-  }
 
   // load list of known concept schemes
   $scope.schemes = [];
@@ -161,8 +158,24 @@ app.controller('ConceptBrowserController',
     $scope.activeURI = angular.copy(uri);
   }
 
+  // error handling
+  $scope.error = { };
+  $scope.reportError = function(type) {
+    $scope.error[type] = true;
+  }
+  $scope.clearErrors = function() {
+    $scope.error = {};
+  }
+  $scope.hasError = function() {
+    for (var key in $scope.error) {
+      if ($scope.error[key] === true) return true;
+    }
+    return false;
+  }
+
   // select a(nother) concept scheme
   $scope.selectScheme = function(scheme, example) {
+    // TODO: if errors.schemeDetailsMissing: try again
     if (!scheme) scheme = $scope.schemes[0];
     if (!scheme || $scope.activeScheme === scheme) return;
     $scope.schemeDetails = null;
@@ -216,40 +229,54 @@ app.controller('ConceptBrowserController',
     var scheme = $location.search().scheme;
     $location.search({scheme:scheme, concept:uri});
 
+    $scope.clearErrors();
+    
+    // retrieve concept
     var url = $scope.activeScheme.concepts + '?' + $httpParamSerializer({ uri:uri });
     $scope.apiURL = url;
-    $http.get(url).success(function(data, status, headers) {
-      var concept = data[0];
-      if (concept) {
-        var deferred = $q.defer();
+    $http.get(url).then(
+      function(response) {
+        var concept = response.data[0];
+        if (concept) {
+          var deferred = $q.defer();
 
-        ['broader','narrower','related','previous','next','relatedPlace'].forEach(function(field) {
-          loadLabels(concept[field]);
-        });
+          ['broader','narrower','related','previous','next','relatedPlace'].forEach(function(field) {
+            loadLabels(concept[field]);
+          });
 
-        // TODO: get depiction with attribution
-        // TODO: what about altLabel and other literals?
-        // TODO: what about ancestors?
-        // TODO: what about subjectOf?
+          // TODO: get depiction with attribution
+          // TODO: what about altLabel and other literals?
+          // TODO: what about ancestors?
+          // TODO: what about subjectOf?
 
-        deferred.resolve(concept);
+          deferred.resolve(concept);
+        } else {
+          $scope.reportError('conceptNotFound');
+        }
+        $scope.activeConcept = concept;
+      },
+      function() {
+        $scope.reportError('conceptServiceFailed');
       }
-      $scope.activeConcept = concept;
-    }).error(function(data, status, headers){
-      // TODO: show error message
-    });
+    );
   }
   
   $scope.getSchemeDetails = function(uri){
+    $scope.clearErrors();
     var url = $scope.baseURL + "BARTOC.php?" + $httpParamSerializer({ uri:uri });
-    $http.get(url).then(function(response) {
-      $scope.schemeDetails = response.data[0];
-    }); // TODO: error
+    $http.get(url).then(
+      function(response) {
+        $scope.schemeDetails = response.data[0];
+      },
+      function() {
+        $scope.reportError('schemeDetailsMissing');
+      }
+    );
   }
 
   $scope.browseConcept = function(concept){
     $scope.getConcept(concept.uri);
-  }
+  };
 
 }]);
 
