@@ -52,10 +52,10 @@
                 </button>
 
                 <span class="input-group-btn" ng-show="schemeDetails">
-                  <button ng-if="schemeDetails.license[0].uri" 
-                          ng-click="toggleSchemeInfo()" class="btn btn-link"
-                          license-button="schemeDetails.license[0].uri">
-                  </button>
+                  <div ng-if="schemeDetails.license[0].uri" 
+                       class="btn btn-link"                                                        
+                       license-button="licenses[schemeDetails.license[0].uri]">
+                  </div>
                   <button ng-click="toggleSchemeInfo()" class="btn btn-link big-text-button">
                     <span ng-if="!schemeInfo" class="glyphicon glyphicon-chevron-down"></span>
                     <span ng-if="schemeInfo" class="glyphicon glyphicon-chevron-up"></span></button>

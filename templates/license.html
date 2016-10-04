@@ -1,4 +1,4 @@
-<span ng-if="license">
-  <img ng-if="license.img" ng-src="{{license.img}}"/>
-  <b ng-if="!license.img && license.notation[0]">{{license.notation[0]}}</b>
-</span>
+<a ng-if="license" href="{{license.uri}}">
+  <img ng-if="license.depiction" ng-src="{{license.depiction[0]}}" title="{{license.prefLabel.en}}"/>
+  <b ng-if="!license.depiction[0] && license.notation[0]">{{license.notation[0]}}</b>
+</a>

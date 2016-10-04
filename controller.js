@@ -21,92 +21,33 @@ app.config(
   $locationProvider.html5Mode({enabled:true,requireBase:false});
 }]);
 
+
+/**
+ * Load list of licenses from static JSKOS file.
+ */
+app.run(['$rootScope','$http', function($rootScope, $http) {
+  $http.get('lib/licenses.json').then(function(response) {
+    $rootScope.licenses = {};
+    angular.forEach( response.data.concepts, function(license) {
+      $rootScope.licenses[license.uri] = license;
+    });
+  });
+}]);
+
 /**
  * Show license information in short form.
  **/
 app.directive('licenseButton', function() {
-  // TODO: load from another service
-  var licenses = {
-    'http://opendatacommons.org/licenses/pddl/': {
-        notation: ['PDDL'],
-    },
-    'http://www.opendatacommons.org/licenses/by/1.0/': {
-        notation: ['ODC-By']
-    },
-    'http://www.opendatacommons.org/licenses/odbl/': {
-        notation: ['ODbL']
-    },
-    'http://creativecommons.org/publicdomain/zero/1.0/': {
-        img: 'http://mirrors.creativecommons.org/presskit/buttons/80x15/svg/publicdomain.svg', 
-        notation: ['CC 0']
-    },
-    'http://creativecommons.org/licenses/by/3.0/': {
-        img: 'http://mirrors.creativecommons.org/presskit/buttons/80x15/svg/by.svg',
-        notation: ['CC BY 3.0']
-    },
-    'http://creativecommons.org/licenses/by/4.0/': {
-        img: 'http://mirrors.creativecommons.org/presskit/buttons/80x15/svg/by.svg',
-        notation: ['CC BY 4.0']
-    },
-    'http://creativecommons.org/licenses/by-sa/3.0/': {
-        img: 'http://mirrors.creativecommons.org/presskit/buttons/80x15/svg/by-sa.svg',
-        notation: ['CC BY-SA 3.0']
-    },
-    'http://creativecommons.org/licenses/by-sa/4.0/': {
-        img: 'http://mirrors.creativecommons.org/presskit/buttons/80x15/svg/by-sa.svg',
-        notation: ['CC BY-SA 4.0']
-    },
-    'http://creativecommons.org/licenses/by-nd/3.0/': {
-        img: 'http://mirrors.creativecommons.org/presskit/buttons/80x15/svg/by-nd.svg',
-        notation: ['CC BY-ND 3.0']
-    },
-    'http://creativecommons.org/licenses/by-nd/4.0/': {
-        img: 'http://mirrors.creativecommons.org/presskit/buttons/80x15/svg/by-nd.svg',
-        notation: ['CC BY-ND 4.0']
-    },
-    'http://creativecommons.org/licenses/by-nc/3.0/': {
-        img: 'http://mirrors.creativecommons.org/presskit/buttons/80x15/svg/by-nc.svg',
-        notation: ['CC BY-NC 3.0']
-    },
-    'http://creativecommons.org/licenses/by-nc/4.0/': {
-        img: 'http://mirrors.creativecommons.org/presskit/buttons/80x15/svg/by-nc.svg',
-        notation: ['CC BY-NC 4.0']
-    },
-    'http://creativecommons.org/licenses/by-nc-sa/3.0/': {
-        img: 'http://mirrors.creativecommons.org/presskit/buttons/80x15/svg/by-nc-sa.svg',
-        notation: ['CC BY-NC-SA 3.0']
-    },
-    'http://creativecommons.org/licenses/by-nc-sa/4.0/': {
-        img: 'http://mirrors.creativecommons.org/presskit/buttons/80x15/svg/by-nc-sa.svg',
-        notation: ['CC BY-NC-SA 4.0']
-    },
-    'http://creativecommons.org/licenses/by-nc-nd/3.0/': {
-        img: 'http://mirrors.creativecommons.org/presskit/buttons/80x15/svg/by-nc-nd.svg',
-        notation: ['CC BY-NC-ND 3.0']
-    },
-    'http://creativecommons.org/licenses/by-nc-nd/4.0/': {
-        img: 'http://mirrors.creativecommons.org/presskit/buttons/80x15/svg/by-nc-nd.svg',
-        notation: ['CC BY-NC-ND 4.0']
-    },
-  };
-
   return {
     restrict: 'A',
     templateUrl: 'templates/license.html',
-    scope: {
-      uri: '=licenseButton',
-    },
-    link: function(scope) {
-      function updateLicense() {
-        scope.license = licenses[scope.uri];
-        // TODO: handle unknown license
-      }
-      scope.$watch('licenses', updateLicense);
-      scope.$watch('uri', updateLicense);
-    }
+    scope: { license: '=licenseButton' }
   };
 });
 
+/**
+ * Show concept scheme information in long form.
+ */
 app.directive('schemeInfo', function() {
   return {
     restrict: 'A',
